@@ -1,16 +1,22 @@
-# This is a sample Python script.
+import urllib.request, urllib.error, urllib.parse
+url = "https://static.nytimes.com/newsgraphics/2022/01/25/wordle-solver/assets/solutions.txt"
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+response = urllib.request.urlopen(url)
+WordList = response.read().decode('UTF-8').splitlines()
+
+GoodLetters = input("Please input letters that appear in the word")
+# BadLetters = input("Please input letters that do not appear in the word")
+# InPlaceChar = input("Please input letters in their respective positions, using a '_' for blank spaces")
+intWordList = []
+WordsLeft = []
+
+for word in WordList:
+    for char in GoodLetters:
+        if char in word:
+            intWordList.append(word)
+
+print(f"Possible words left are {WordsLeft}")
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# list(filter(lambda k: 'ab' in k, lst))

@@ -1,11 +1,16 @@
 #Importing libraries
-import re
 import urllib.request, urllib.error, urllib.parse
 url = "https://static.nytimes.com/newsgraphics/2022/01/25/wordle-solver/assets/solutions.txt"
 
 #Pulling word list
 response = urllib.request.urlopen(url)
 WordList = response.read().decode('UTF-8').splitlines()
+
+#finds each occurance of a letter
+def find(string, char):
+    for i, c in enumerate(string):
+        if c == char:
+            yield i
 
 #Splits strings into characters
 def split(word):
@@ -19,34 +24,23 @@ def FilterWanted(Chars,lst):
 
 #removes words with incorrect characters
 def FilterUnwanted(Chars,lst):
-    re_pattern = re.compile("^" + re.escape(Chars).replace("_", ".") + "$")
+    for char in Chars:
+        lst = list(filter(lambda k: char not in k, lst))
+    return lst
 
-    # get words that
-    #   (a) are the correct length
-    #   (b) aren't in the wrong guesses
-    #   (c) match the pattern
-    return [
-        word
-        for word in lst
-        if (
-                len(word) == len(Chars) and
-                re_pattern.match(word)
-        )
-    ]
-
+#finds all letters in place
 def LettersInPlace(Chars, lst):
     pos = 0
     for char in Chars:
         if(char.isalpha()):
-            print(pos)
-            print(char)
-            lst = list(filter(lambda k: k.index(char) == pos, lst))
+            lst = list(x for x in lst if pos in find(x, char))
         pos += 1
+    return lst
 
 #Taking inputs
-GoodLetters = split(input("Please input letters that appear in the word"))
-BadLetters = split(input("Please input letters that do not appear in the word"))
-InPlaceChar = input("Please input letters in their respective positions, using a '-' for blank spaces")
+GoodLetters = split(input("Please input letters that appear in the word: "))
+BadLetters = split(input("Please input letters that do not appear in the word: "))
+InPlaceChar = split(input("Please input letters in their respective positions, using a '-' for blank spaces: "))
 intWordList = []
 WordsLeft = []
 
@@ -54,7 +48,6 @@ WordsLeft = []
 WordsLeft = FilterWanted(GoodLetters, WordList)
 #Filtering with bad letters
 WordsLeft = FilterUnwanted(BadLetters,WordsLeft)
-#Filtering with position
 WordsLeft = LettersInPlace(InPlaceChar, WordsLeft)
 
 

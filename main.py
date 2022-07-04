@@ -48,6 +48,7 @@ WordsLeft = []
 WordsLeft = FilterWanted(GoodLetters, WordList)
 #Filtering with bad letters
 WordsLeft = FilterUnwanted(BadLetters,WordsLeft)
+#Filtering letters in place
 WordsLeft = LettersInPlace(InPlaceChar, WordsLeft)
 
 
